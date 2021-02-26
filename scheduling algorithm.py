@@ -30,15 +30,12 @@ class FCFS(inputs):
 
  def getCompletionTime(self):
   self.arrivalTime.sort()
-  print(self.arrivalTime)
-  time = 0
+  time = self.arrivalTime[0][0]
   for i in range(n):
    index = self.arrivalTime[i][1]
-   print(index)
-   time += self.brustTime[0][index]
-   print(time)
+   if self.arrivalTime[i][0] > time: time = self.arrivalTime[i][0] + self.brustTime[index][0]
+   else: time += self.brustTime[index][0]
    self.completionTime[index] = time
-  print(self.completionTime) 
  
  
  def getTurnAroundTime(self):
@@ -59,6 +56,40 @@ class FCFS(inputs):
 
 
 
+class RR(inputs):
+
+ def getCompletionTime(self,tq):
+  self.arrivalTime.sort()
+  time = self.arrivalTime[0][0]
+  while time  != (self.arrivalTime[0][0] + sum(self.testbt)):
+   for i in range(n):
+    index = self.arrivalTime[i][1]
+    if self.brustTime[index][0] <= tq and self.brustTime[index][0] > 0:
+     time += self.brustTime[index][0]
+     self.completionTime[index] = time
+     self.brustTime[index][0] = 0 
+    elif self.brustTime[index][0] > tq:
+     self.brustTime[index][0] -= tq
+     time += tq
+
+   
+ 
+ 
+ def getTurnAroundTime(self):
+  for i in range(n):
+    self.turnAroundTime[i] = self.completionTime[i] - self.testat[i]
+ 
+ def getWaitingTime(self):
+  for i in range(n):
+    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+ 
+ def printRr(self):
+  print("\n")
+  print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
+  for x in range(n):
+   txt = "    {}          {}           {}            {}             {}              {} "
+   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+
 
 
 
@@ -75,10 +106,10 @@ n = int(input(" input the number of processes : "))
 
 input1 = inputs(n)
 
-fcfs = FCFS(n)
-fcfs.getInput()
-fcfs.getCompletionTime()
-fcfs.getTurnAroundTime()
-fcfs.getWaitingTime()
-fcfs.printFcfs()
+rr = RR(n)
+rr.getInput()
+rr.getCompletionTime(2)
+rr.getTurnAroundTime()
+rr.getWaitingTime()
+rr.printRr()
 
