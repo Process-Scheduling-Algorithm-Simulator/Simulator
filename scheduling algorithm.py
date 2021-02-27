@@ -9,8 +9,9 @@ class inputs:
   self.completionTime = [0] * n
   self.turnAroundTime = [0] * n
   self.waitingTime = [0] * n
+  self.priority = [] * n
  
- def getInput(self):
+ def getInput(self,option):
   for i in range(n):
    print("\n")
    txt = "Process {} : "
@@ -23,6 +24,9 @@ class inputs:
    bt = int(input(" input the brust time : "))
    self.brustTime.append([bt,i])
    self.testbt[i] = bt
+   if option == 3:                                                                     # 3 for priority_prem
+    p = int(input(" input the priority of the process : "))  
+    self.priority.append([p,i])                                         
 
 
 
@@ -92,11 +96,37 @@ class RR(inputs):
 
 
 
+class priority_prem(inputs):
+
+ 
+ def getCompletionTime(self): 
+  self.priority.sort()
+  index = self.priority[0][1]
+  time =  self.testat[index]
+  for i in range(n):
+   index = self.priority[i][1]
+   if self.arrivalTime[index][0] > time: time = self.arrivalTime[index][0] + self.brustTime[index][0]
+   else: time += self.brustTime[index][0]
+   self.completionTime[index] = time
 
 
 
 
 
+ def getTurnAroundTime(self):
+  for i in range(n):
+    self.turnAroundTime[i] = self.completionTime[i] - self.testat[i]
+ 
+ def getWaitingTime(self):
+  for i in range(n):
+    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+ 
+ def printpP(self):
+  print("\n")
+  print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
+  for x in range(n):
+   txt = "    {}          {}           {}            {}             {}              {} "
+   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
 
 
 # driver's code
@@ -106,10 +136,10 @@ n = int(input(" input the number of processes : "))
 
 input1 = inputs(n)
 
-rr = RR(n)
-rr.getInput()
-rr.getCompletionTime(2)
-rr.getTurnAroundTime()
-rr.getWaitingTime()
-rr.printRr()
+pp = priority_prem(n)
+pp.getInput(3)
+pp.getCompletionTime()
+pp.getTurnAroundTime()
+pp.getWaitingTime()
+pp.printpP()
 
