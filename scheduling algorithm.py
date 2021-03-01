@@ -180,6 +180,42 @@ class SJF(inputs):
    print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
 
 
+class SRTF(inputs):
+
+ 
+
+ def getCompletionTime(self):
+  self.arrivalTime.sort()
+  self.brustTime.sort()
+  time = self.arrivalTime[0][0]
+  while time != (self.arrivalTime[0][0] + sum(self.testbt)):
+   for i in range(n):
+    index = self.brustTime[i][1]
+    if self.brustTime[i][0] > 0  and self.testat[index] <= time:
+     self.brustTime[i][0] -= 1
+     time += 1
+     self.brustTime.sort()
+     if self.brustTime[i][0] == 0: self.completionTime[index] = time
+     break
+
+
+
+
+ def getTurnAroundTime(self):
+  for i in range(n):
+    self.turnAroundTime[i] = self.completionTime[i] - self.testat[i]
+ 
+ def getWaitingTime(self):
+  for i in range(n):
+    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+ 
+ def printsRTF(self):
+  print("\n")
+  print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
+  for x in range(n):
+   txt = "    {}          {}           {}            {}             {}              {} "
+   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+
 
 # driver's code
 
@@ -188,9 +224,9 @@ n = int(input(" input the number of processes : "))
 
 input1 = inputs(n)
 
-sjf = SJF(n)
-sjf.getInput(0)
-sjf.getCompletionTime()
-sjf.getTurnAroundTime()
-sjf.getWaitingTime()
-sjf.printsJf()
+srtf = SRTF(n)
+srtf.getInput(0)
+srtf.getCompletionTime()
+srtf.getTurnAroundTime()
+srtf.getWaitingTime()
+srtf.printsRTF()
