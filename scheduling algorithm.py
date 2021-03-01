@@ -96,7 +96,9 @@ class RR(inputs):
 
 
 
-class priority_prem(inputs):
+
+
+class priority_nonprem(inputs):
 
  
  def getCompletionTime(self): 
@@ -129,6 +131,56 @@ class priority_prem(inputs):
    print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
 
 
+
+
+class SJF(inputs):
+
+ def __init__(self,n):
+  super().__init__(n)
+  self.bt = [] * n 
+ 
+ def getInput(self,option):
+  super().getInput(option)
+  for i in range(n):
+   self.bt.append([self.testbt[i],i,0])
+ 
+ 
+
+
+ def getCompletionTime(self):
+  count = n
+  self.bt.sort()
+  self.arrivalTime.sort()
+  time = self.arrivalTime[0][0]
+  while count > 0:
+   for i in range(n):
+    index = self.bt[i][1]
+    if self.testat[index] <= time and self.bt[i][2] == 0:
+     self.bt[i][2] = 1
+     time += self.testbt[index]
+     self.completionTime[index] = time
+     count -= 1
+     break
+
+
+
+ def getTurnAroundTime(self):
+  for i in range(n):
+    self.turnAroundTime[i] = self.completionTime[i] - self.testat[i]
+ 
+ def getWaitingTime(self):
+  for i in range(n):
+    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+ 
+ def printsJf(self):
+  print("\n")
+  print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
+  for x in range(n):
+   txt = "    {}          {}           {}            {}             {}              {} "
+   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+
+
+
 # driver's code
 
 
@@ -136,10 +188,9 @@ n = int(input(" input the number of processes : "))
 
 input1 = inputs(n)
 
-pp = priority_prem(n)
-pp.getInput(3)
-pp.getCompletionTime()
-pp.getTurnAroundTime()
-pp.getWaitingTime()
-pp.printpP()
-
+sjf = SJF(n)
+sjf.getInput(0)
+sjf.getCompletionTime()
+sjf.getTurnAroundTime()
+sjf.getWaitingTime()
+sjf.printsJf()
