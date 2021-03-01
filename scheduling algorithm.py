@@ -172,31 +172,18 @@ class priority_prem(inputs):
 
 class SJF(inputs):
 
- def __init__(self,n):
-  super().__init__(n)
-  self.bt = [] * n 
- 
- def getInput(self,option):
-  super().getInput(option)
-  for i in range(n):
-   self.bt.append([self.testbt[i],i,0])
- 
- 
-
 
  def getCompletionTime(self):
-  count = n
-  self.bt.sort()
   self.arrivalTime.sort()
+  self.brustTime.sort()
   time = self.arrivalTime[0][0]
-  while count > 0:
+  while time != self.arrivalTime[0][0] + sum(self.testbt):
    for i in range(n):
-    index = self.bt[i][1]
-    if self.testat[index] <= time and self.bt[i][2] == 0:
-     self.bt[i][2] = 1
-     time += self.testbt[index]
+    index = self.brustTime[i][1]
+    if self.brustTime[i][0] != 0 and self.testat[index] <= time:
+     time += self.brustTime[i][0]
+     self.brustTime[i][0] = 0
      self.completionTime[index] = time
-     count -= 1
      break
 
 
@@ -209,7 +196,7 @@ class SJF(inputs):
   for i in range(n):
     self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
  
- def printsJf(self):
+ def printsJF(self):
   print("\n")
   print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
   for x in range(n):
@@ -261,9 +248,9 @@ n = int(input(" input the number of processes : "))
 
 input1 = inputs(n)
 
-pnp = priority_prem(n)
-pnp.getInput(4)
-pnp.getCompletionTime()
-pnp.getTurnAroundTime()
-pnp.getWaitingTime()
-pnp.printpP()
+sjf = SJF(n)
+sjf.getInput(0)
+sjf.getCompletionTime()
+sjf.getTurnAroundTime()
+sjf.getWaitingTime()
+sjf.printsJF()
