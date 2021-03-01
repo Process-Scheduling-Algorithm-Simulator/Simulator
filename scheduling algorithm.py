@@ -24,7 +24,7 @@ class inputs:
    bt = int(input(" input the brust time : "))
    self.brustTime.append([bt,i])
    self.testbt[i] = bt
-   if option == 3:                                                                     # 3 for priority_prem
+   if option == 3 or option == 4:                                                                     # 3 for priority_nonprem  4 fro priority_prem
     p = int(input(" input the priority of the process : "))  
     self.priority.append([p,i])                                         
 
@@ -123,12 +123,49 @@ class priority_nonprem(inputs):
   for i in range(n):
     self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
  
+ def printpNP(self):
+  print("\n")
+  print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
+  for x in range(n):
+   txt = "    {}          {}           {}            {}             {}              {} "
+   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+
+
+
+
+class priority_prem(inputs):
+
+ def getCompletionTime(self):
+  self.arrivalTime.sort()
+  self.priority.sort()
+  time = self.arrivalTime[0][0]
+  while time != (self.arrivalTime[0][0] + sum(self.testbt)):
+   for i in range(n):
+    index = self.priority[i][1]
+    if self.brustTime[index][0] != 0 and self.testat[index] <= time:
+     self.brustTime[index][0] -= 1
+     time += 1
+     if self.brustTime[index][0] == 0: self.completionTime[index] = time
+     break
+  
+
+
+ def getTurnAroundTime(self):
+  for i in range(n):
+    self.turnAroundTime[i] = self.completionTime[i] - self.testat[i]
+ 
+ def getWaitingTime(self):
+  for i in range(n):
+    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+ 
  def printpP(self):
   print("\n")
   print(" Process  arrivalTime  brustTime  completionTime  turnAroundTime  waitingTime")
   for x in range(n):
    txt = "    {}          {}           {}            {}             {}              {} "
    print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+
+ 
 
 
 
@@ -224,9 +261,9 @@ n = int(input(" input the number of processes : "))
 
 input1 = inputs(n)
 
-srtf = SRTF(n)
-srtf.getInput(0)
-srtf.getCompletionTime()
-srtf.getTurnAroundTime()
-srtf.getWaitingTime()
-srtf.printsRTF()
+pnp = priority_prem(n)
+pnp.getInput(4)
+pnp.getCompletionTime()
+pnp.getTurnAroundTime()
+pnp.getWaitingTime()
+pnp.printpP()
