@@ -1,4 +1,5 @@
 
+
 class inputs:
  def __init__(self,n):
   self.processName = [0] * n
@@ -37,8 +38,8 @@ class FCFS(inputs):
   time = self.arrivalTime[0][0]
   for i in range(n):
    index = self.arrivalTime[i][1]
-   if self.arrivalTime[i][0] > time: time = self.arrivalTime[i][0] + self.burstTime[index][0]
-   else: time += self.burstTime[index][0]
+   if self.arrivalTime[i][0] > time: time = self.arrivalTime[i][0] + self.testbt[index]
+   else: time += self.testbt[index]
    self.completionTime[index] = time
  
  
@@ -48,14 +49,14 @@ class FCFS(inputs):
  
  def getWaitingTime(self):
   for i in range(n):
-    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+    self.waitingTime[i] = self.turnAroundTime[i] - self.burstTime[i][0]
  
  def printFcfs(self):
   print("\n")
   print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
   for x in range(n):
    txt = "    {}          {}           {}            {}             {}              {} "
-   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+   print(txt.format(self.processName[x],self.testat[x],self.burstTime[x][0],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
   print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime)/n))
   print(" Average Waiting Time : " + str(sum(self.waitingTime)/n))
 
@@ -67,16 +68,35 @@ class RR(inputs):
  def getCompletionTime(self,tq):
   self.arrivalTime.sort()
   time = self.arrivalTime[0][0]
-  while time  != (self.arrivalTime[0][0] + sum(self.testbt)):
-   for i in range(n):
-    index = self.arrivalTime[i][1]
-    if self.burstTime[index][0] <= tq and self.burstTime[index][0] > 0:
-     time += self.burstTime[index][0]
-     self.completionTime[index] = time
-     self.burstTime[index][0] = 0 
-    elif self.burstTime[index][0] > tq:
-     self.burstTime[index][0] -= tq
-     time += tq
+  queue =  []
+  k = 0
+  #print(queue)
+  index = self.arrivalTime[0][1]
+  #print("index : " + str(index))
+  queue.append(index)
+  while len(queue)!=0:
+   #print("len : " + str(len(queue)))
+   index = queue.pop(0)
+   #print("index : " + str(index))
+   if self.testbt[index] <= tq and self.testbt[index] > 0 and time >= self.testat[index]:
+    time += self.testbt[index]
+    #print("time : " + str(time))
+    self.completionTime[index] = time
+    #print("completionTime of " + str(index) + " is " + str(time))
+    self.testbt[index] = 0 
+   elif self.testbt[index] > tq and time >= self.testat[index]:
+    self.testbt[index] -= tq
+    time += tq
+    #print(time)
+   j = k + 1
+   while j < n:
+    z = self.arrivalTime[j][1]
+    if self.testat[z] <= time and self.testbt[z] > 0 and z not in queue: queue.append(z)
+    j += 1
+   if self.testbt[index] > 0 and index not in queue: queue.append(index)
+   k += 1
+   #print(queue)
+
 
    
  
@@ -87,14 +107,14 @@ class RR(inputs):
  
  def getWaitingTime(self):
   for i in range(n):
-    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+    self.waitingTime[i] = self.turnAroundTime[i] - self.burstTime[i][0]
  
  def printRr(self):
   print("\n")
   print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
   for x in range(n):
    txt = "    {}          {}           {}            {}             {}              {} "
-   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+   print(txt.format(self.processName[x],self.testat[x],self.burstTime[x][0],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
   print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime)/n))
   print(" Average Waiting Time : " + str(sum(self.waitingTime)/n))
 
@@ -110,12 +130,13 @@ class priority_nonprem(inputs):
   self.arrivalTime.sort() 
   self.priority.sort()
   time =  self.arrivalTime[0][0]
-  while time != (self.arrivalTime[0][0] + sum(self.testbt)):
+  sums =  self.arrivalTime[0][0] + sum(self.testbt)
+  while time != (sums):
    for i in range(n):
     index = self.priority[i][1]
-    if self.burstTime[index][0] != 0 and self.testat[index] <= time:
-     time += self.burstTime[index][0]
-     self.burstTime[index][0] = 0
+    if self.testbt[index] != 0 and self.testat[index] <= time:
+     time += self.testbt[index]
+     self.testbt[index] = 0
      self.completionTime[index] = time
      break
 
@@ -129,14 +150,13 @@ class priority_nonprem(inputs):
  
  def getWaitingTime(self):
   for i in range(n):
-    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
- 
+    self.waitingTime[i] = self.turnAroundTime[i] - self.burstTime[i][0]
  def printPnp(self):
   print("\n")
   print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
   for x in range(n):
    txt = "    {}          {}           {}            {}             {}              {} "
-   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+   print(txt.format(self.processName[x],self.testat[x],self.burstTime[x][0],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
   print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime)/n))
   print(" Average Waiting Time : " + str(sum(self.waitingTime)/n))
 
@@ -150,13 +170,14 @@ class priority_prem(inputs):
   self.arrivalTime.sort()
   self.priority.sort()
   time = self.arrivalTime[0][0]
-  while time != (self.arrivalTime[0][0] + sum(self.testbt)):
+  sums =  self.arrivalTime[0][0] + sum(self.testbt)
+  while time != (sums):
    for i in range(n):
     index = self.priority[i][1]
-    if self.burstTime[index][0] != 0 and self.testat[index] <= time:
-     self.burstTime[index][0] -= 1
+    if self.testbt[index] != 0 and self.testat[index] <= time:
+     self.testbt[index] -= 1
      time += 1
-     if self.burstTime[index][0] == 0: self.completionTime[index] = time
+     if self.testbt[index]  == 0: self.completionTime[index] = time
      break
   
 
@@ -167,14 +188,14 @@ class priority_prem(inputs):
  
  def getWaitingTime(self):
   for i in range(n):
-    self.waitingTime[i] = self.turnAroundTime[i] - self.testbt[i]
+    self.waitingTime[i] = self.turnAroundTime[i] - self.burstTime[i][0]
  
  def printPp(self):
   print("\n")
   print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
   for x in range(n):
    txt = "    {}          {}           {}            {}             {}              {} "
-   print(txt.format(self.processName[x],self.testat[x],self.testbt[x],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
+   print(txt.format(self.processName[x],self.testat[x],self.burstTime[x][0],self.completionTime[x],self.turnAroundTime[x],self.waitingTime[x]))
   print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime)/n))
   print(" Average Waiting Time : " + str(sum(self.waitingTime)/n))
 
@@ -283,9 +304,9 @@ while(1):
  print("   0.                              exit  ")
 
 
- option = int(input(" \noption : "))
+ option = int(str(input(" \noption : ")))
 
- n = int(input(" \ninput the number of processes : "))
+ n = int(str(input(" \ninput the number of processes : ")))
  input1 = inputs(n)
 
  if option == 0 :
@@ -309,6 +330,7 @@ while(1):
   rr.getTurnAroundTime()
   rr.getWaitingTime()
   rr.printRr()
+
 
  if option == 3 :
   print(" \nNote : While entering priority assume lower the number higher the priority ")
