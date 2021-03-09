@@ -1,4 +1,5 @@
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainWindow import*
 from schedulingAlgo import*
@@ -11,10 +12,9 @@ class Ui_MainWindow1(object):
         self.n = 2
         self.option = 0
         
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1149, 883)
+        MainWindow.resize(1149, 902)
         MainWindow.setAutoFillBackground(False)
         MainWindow.setStyleSheet("QMainWindow\n"
 "{\n"
@@ -58,8 +58,113 @@ class Ui_MainWindow1(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(160)
         self.tableWidget.horizontalHeader().setHighlightSections(True)
         self.test = QtWidgets.QPushButton(self.centralwidget)
-        self.test.setGeometry(QtCore.QRect(440, 550, 211, 81))
+        self.test.setGeometry(QtCore.QRect(460, 630, 211, 81))
         self.test.setObjectName("test")
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(0, 400, 1151, 131))
+        font = QtGui.QFont()
+        font.setFamily("Tahoma")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.frame.setFont(font)
+        self.frame.setStyleSheet("QFrame\n"
+"{\n"
+"border : 4px dashed rgb(255, 11, 15)\n"
+"}")
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.label = QtWidgets.QLabel(self.frame)
+        self.label.setGeometry(QtCore.QRect(20, 40, 191, 41))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI Black")
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setStyleSheet("QLabel\n"
+"{\n"
+"font-size : 20px;\n"
+"border : none;\n"
+"}\n"
+"\n"
+"")
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(self.frame)
+        self.label_2.setGeometry(QtCore.QRect(340, 40, 241, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI Black")
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("QLabel\n"
+"{\n"
+"font-size : 20px;\n"
+"border : none;\n"
+"}\n"
+"\n"
+"")
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(self.frame)
+        self.label_3.setGeometry(QtCore.QRect(750, 40, 281, 51))
+        font = QtGui.QFont()
+        font.setFamily("Segoe UI Black")
+        font.setPointSize(-1)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setStyleSheet("QLabel\n"
+"{\n"
+"font-size : 20px;\n"
+"border : none;\n"
+"}\n"
+"\n"
+"")
+        self.label_3.setObjectName("label_3")
+        self.averageTAT = QtWidgets.QLineEdit(self.frame)
+        self.averageTAT.setGeometry(QtCore.QRect(1040, 50, 81, 31))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.averageTAT.setFont(font)
+        self.averageTAT.setStyleSheet("QLineEdit\n"
+"{\n"
+"padding : 1px 2px 2px 2px;\n"
+"}")
+        self.averageTAT.setObjectName("averageTAT")
+        self.averageWT = QtWidgets.QLineEdit(self.frame)
+        self.averageWT.setGeometry(QtCore.QRect(600, 50, 81, 31))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.averageWT.setFont(font)
+        self.averageWT.setStyleSheet("QLineEdit\n"
+"{\n"
+"padding : 1px 2px 2px 2px;\n"
+"}")
+        self.averageWT.setObjectName("averageWT")
+        self.timeQuantum = QtWidgets.QLineEdit(self.frame)
+        self.timeQuantum.setGeometry(QtCore.QRect(200, 50, 81, 31))
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro Black")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.timeQuantum.setFont(font)
+        self.timeQuantum.setStyleSheet("QLineEdit\n"
+"{\n"
+"padding : 1px 2px 2px 2px;\n"
+"}")
+        self.timeQuantum.setObjectName("timeQuantum")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -67,7 +172,6 @@ class Ui_MainWindow1(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
         self.test.clicked.connect(self.simulate)
 
     def retranslateUi(self, MainWindow):
@@ -89,8 +193,12 @@ class Ui_MainWindow1(object):
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Waiting Time"))
         self.test.setText(_translate("MainWindow", "test"))
+        self.label.setText(_translate("MainWindow", "Time Quantum : "))
+        self.label_2.setText(_translate("MainWindow", "Average Waiting Time : "))
+        self.label_3.setText(_translate("MainWindow", "AverageTurnAround Time : "))
 
     def simulate(self):
+        
 
         if self.option == 0:
             fcfs = FCFS(self.n)
@@ -126,10 +234,14 @@ class Ui_MainWindow1(object):
 
                 wt = QtWidgets.QTableWidgetItem()
                 wt.setText(str(fcfs.waitingTime[j]))
-                self.tableWidget.setItem(j,6, wt) 
+                self.tableWidget.setItem(j,6, wt)
+
+            self.averageWT.setText(str(sum(fcfs.waitingTime)/self.n))
+            self.averageTAT.setText(str(sum(fcfs.turnAroundTime)/self.n)) 
 
 
         if self.option == 1:
+            tq = int(self.timeQuantum.text())
             rr = RR(self.n)
             
             for z in range(self.n):
@@ -148,7 +260,7 @@ class Ui_MainWindow1(object):
 
                 
 
-            rr.getCompletionTime()
+            rr.getCompletionTime(tq)
             rr.getTurnAroundTime()
             rr.getWaitingTime()
 
@@ -164,7 +276,9 @@ class Ui_MainWindow1(object):
                 wt = QtWidgets.QTableWidgetItem()
                 wt.setText(str(rr.waitingTime[j]))
                 self.tableWidget.setItem(j,6, wt) 
-        
+            
+            self.averageWT.setText(str(sum(rr.waitingTime)/self.n))
+            self.averageTAT.setText(str(sum(rr.turnAroundTime)/self.n)) 
 
         if self.option == 2:
             pnp = priority_nonprem(self.n)
@@ -185,8 +299,6 @@ class Ui_MainWindow1(object):
                     if j == 3:
                         pri = int(self.tableWidget.item(z, j).text())
                         pnp.priority.append([pri,z])
-
-
                 
 
             pnp.getCompletionTime()
@@ -206,12 +318,16 @@ class Ui_MainWindow1(object):
                 wt.setText(str(pnp.waitingTime[j]))
                 self.tableWidget.setItem(j,6, wt) 
 
+            self.averageWT.setText(str(sum(pnp.waitingTime)/self.n))
+            self.averageTAT.setText(str(sum(pnp.turnAroundTime)/self.n)) 
+
+
         
         if self.option == 3:
             pp = priority_prem(self.n)
             
             for z in range(self.n):
-                for j in range(3):
+                for j in range(4):
                     if j == 0:
                         process = self.tableWidget.item(z, j).text()
                         pp.processName[z] = process
@@ -245,6 +361,10 @@ class Ui_MainWindow1(object):
                 wt = QtWidgets.QTableWidgetItem()
                 wt.setText(str(pp.waitingTime[j]))
                 self.tableWidget.setItem(j,6, wt)
+
+
+            self.averageWT.setText(str(sum(pp.waitingTime)/self.n))
+            self.averageTAT.setText(str(sum(pp.turnAroundTime)/self.n)) 
 
         if self.option == 4:
             sjf = SJF(self.n)
@@ -282,6 +402,9 @@ class Ui_MainWindow1(object):
                 wt.setText(str(sjf.waitingTime[j]))
                 self.tableWidget.setItem(j,6, wt) 
 
+            self.averageWT.setText(str(sum(sjf.waitingTime)/self.n))
+            self.averageTAT.setText(str(sum(sjf.turnAroundTime)/self.n)) 
+
         if self.option == 5:
             srtf = SRTF(self.n)
             
@@ -317,6 +440,9 @@ class Ui_MainWindow1(object):
                 wt = QtWidgets.QTableWidgetItem()
                 wt.setText(str(srtf.waitingTime[j]))
                 self.tableWidget.setItem(j,6, wt)  
+
+            self.averageWT.setText(str(sum(srtf.waitingTime)/self.n))
+            self.averageTAT.setText(str(sum(srtf.turnAroundTime)/self.n)) 
 
 
 
