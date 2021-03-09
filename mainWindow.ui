@@ -164,27 +164,6 @@ font-size : 22px;
       <string>Algorithm         :</string>
      </property>
     </widget>
-    <widget class="QTextEdit" name="textEdit">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>60</y>
-       <width>161</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="statusTip">
-      <string>  Input the number of process</string>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QTextEdit
-{
-border:none;
-border-radius:2px;
-font-size:22px;
-}</string>
-     </property>
-    </widget>
     <widget class="QComboBox" name="comboBox">
      <property name="geometry">
       <rect>
@@ -243,6 +222,16 @@ font-size : 18px;
        <string>SRTF</string>
       </property>
      </item>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>60</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
     </widget>
    </widget>
    <widget class="QPushButton" name="start">
