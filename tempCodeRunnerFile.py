@@ -1,1 +1,1 @@
-int(self.lineEdit.text())
+930, 630, 211, 81
