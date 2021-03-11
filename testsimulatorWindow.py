@@ -238,6 +238,9 @@ class Ui_MainWindow1(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.canvas = Canvas(MainWindow,width=8, height=4)
+        self.canvas.move(0,550)
+        
         self.test.clicked.connect(lambda: self.simulate(MainWindow))
 
         self.test1.clicked.connect(lambda: self.draw())
@@ -251,8 +254,6 @@ class Ui_MainWindow1(object):
         
 
     def draw(self):
-        self.canvas = Canvas(MainWindow,width=8, height=4)
-        self.canvas.move(0,550)
         self.canvas.plot()
 
 
