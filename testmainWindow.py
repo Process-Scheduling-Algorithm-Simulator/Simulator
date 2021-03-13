@@ -1,6 +1,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from graph import*
+from testsimulatorWindow import*
 
 
 class Ui_MainWindow(object):
