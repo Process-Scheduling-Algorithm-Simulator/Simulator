@@ -1,12 +1,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog, QMessageBox, QMainWindow, QVBoxLayout, QGridLayout
 from mainWindow import*
 from testSchedulingAlgo import*
 import sys
+import matplotlib
+from matplotlib import figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import numpy as np
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
 from threading import Timer
 
 
@@ -17,19 +22,26 @@ colors = ['red' , 'blue' , 'green' , 'pink' , 'yellow' , 'black']
 
 
 
-class Canvas(FigureCanvas):
-    def __init__(self, parent, width = 3, height = 3, dpi = 100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
+class MatplotlibFigure(QWidget):
+    def __init__(self):
+        super().__init__()        
+        self.initializewidget()
+        self.plot()
                 
 
 
         
 
-    
+    def initializewidget(self):
+
+        gridlayout = QGridLayout()
+        self.setLayout(gridlayout)
+
+        self.figure = plt.figure(figsize=(5,5))
+        self.canvas = FigureCanvas(self.figure)
+        self.toolbar = NavigationToolbar(self.canvas,self)
+        gridlayout.addWidget(self.canvas,1,0,1,2)
+        gridlayout.addWidget(self.toolbar,0,0,1,2)
 
     def plot(self):
         print("gannt begins")
@@ -56,10 +68,10 @@ class Canvas(FigureCanvas):
             duration = length[i][1]
             gnt.broken_barh([(start, duration)], (10, 10), facecolors =(colors[index]))
 
+        self.canvas.draw()
 
-  
-    
- 
+
+
 
 
 
@@ -238,23 +250,22 @@ class Ui_MainWindow1(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        self.canvas = Canvas(MainWindow,width=8, height=4)
-        self.canvas.move(0,550)
-        
-        self.test.clicked.connect(lambda: self.simulate(MainWindow))
 
-        self.test1.clicked.connect(lambda: self.draw())
+        
+        self.test.clicked.connect(self.simulate)
 
-        #
-        #self.self.simulate(MainWindow)
-        # t = Timer(50.0, 
-        # t.start()
-        
-        
-        
+        self.test.clicked.connect(self.plot_data)
 
-    def draw(self):
-        self.canvas.plot()
+        self.matplot = MatplotlibFigure()
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 550, 900, 480))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        
+        
+    
 
 
     def retranslateUi(self, MainWindow):
@@ -283,8 +294,15 @@ class Ui_MainWindow1(object):
 
 
 
+    def plot_data(self):
+                # comment this line
+        # self.canvas.setParent(self)   # comment this line
+        self.verticalLayout.addWidget(self.matplot)  # <--- Add this line
+        self.matplot.plot()   
+        
 
-    def simulate(self,MainWindow):
+
+    def simulate(self):
 
         
         
