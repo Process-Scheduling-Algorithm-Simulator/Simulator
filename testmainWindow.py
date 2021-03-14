@@ -1,6 +1,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from testsimulatorWindow import*
+import color
 
 
 class Ui_MainWindow(object):
@@ -123,8 +124,20 @@ class Ui_MainWindow(object):
         #lineEdit
 
         self.lineEdit = QtWidgets.QLineEdit(self.frame)
+        font = QtGui.QFont()
+        font.setFamily("Source Sans Pro Black")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.lineEdit.setFont(font)
+        self.lineEdit.setStyleSheet("QLineEdit\n"
+"{\n"
+"padding : 1px 2px 2px 2px;\n"
+"}")
         self.lineEdit.setGeometry(QtCore.QRect(220, 60, 161, 41))
         self.lineEdit.setObjectName("lineEdit")
+
         self.start = QtWidgets.QPushButton(self.centralwidget)
         self.start.setGeometry(QtCore.QRect(500, 460, 131, 51))
         font = QtGui.QFont()
@@ -176,6 +189,7 @@ class Ui_MainWindow(object):
 
     def getNum(self):
         self.n = int(self.lineEdit.text())
+        color.number = self.n
         
         
     def getAlgo(self):

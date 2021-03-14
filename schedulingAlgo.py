@@ -1,3 +1,9 @@
+startTime = []
+length = []
+processName = []
+
+
+
 class inputs:
  def __init__(self,n):
   self.n = n
@@ -18,8 +24,14 @@ class FCFS(inputs):
   time = self.arrivalTime[0][0]
   for i in range(self.n):
    index = self.arrivalTime[i][1]
-   if self.arrivalTime[i][0] > time: time = self.arrivalTime[i][0] + self.testbt[index]
-   else: time += self.testbt[index]
+   if self.arrivalTime[i][0] > time:
+        time = self.arrivalTime[i][0] + self.testbt[index]
+        startTime.append([index,self.arrivalTime[i][0]])
+        length.append([index,self.testbt[index]])
+   else:
+        startTime.append([index,time])
+        time += self.testbt[index]
+        length.append([index,self.testbt[index]])
    self.completionTime[index] = time
  
  
@@ -39,24 +51,21 @@ class RR(inputs):
   time = self.arrivalTime[0][0]
   queue =  []
   k = 0
-  #print(queue)
   index = self.arrivalTime[0][1]
-  #print("index : " + str(index))
   queue.append(index)
   while len(queue)!=0:
-   #print("len : " + str(len(queue)))
    index = queue.pop(0)
-   #print("index : " + str(index))
    if self.testbt[index] <= tq and self.testbt[index] > 0 and time >= self.testat[index]:
+    startTime.append([index,time])
     time += self.testbt[index]
-    #print("time : " + str(time))
+    length.append([index,self.testbt[index]])
     self.completionTime[index] = time
-    #print("completionTime of " + str(index) + " is " + str(time))
     self.testbt[index] = 0 
    elif self.testbt[index] > tq and time >= self.testat[index]:
+    startTime.append([index,time])
+    length.append([index,tq])
     self.testbt[index] -= tq
     time += tq
-    #print(time)
    j = k + 1
    while j < self.n:
     z = self.arrivalTime[j][1]
@@ -64,7 +73,6 @@ class RR(inputs):
     j += 1
    if self.testbt[index] > 0 and index not in queue: queue.append(index)
    k += 1
-   #print(queue)
 
 
  def getTurnAroundTime(self):
@@ -92,7 +100,9 @@ class priority_nonprem(inputs):
    for i in range(self.n):
     index = self.priority[i][1]
     if self.testbt[index] != 0 and self.testat[index] <= time:
+     startTime.append([index,time])
      time += self.testbt[index]
+     length.append([index,self.testbt[index]])
      self.testbt[index] = 0
      self.completionTime[index] = time
      break
@@ -122,7 +132,9 @@ class priority_prem(inputs):
    for i in range(self.n):
     index = self.priority[i][1]
     if self.testbt[index] != 0 and self.testat[index] <= time:
+     startTime.append([index,time])
      self.testbt[index] -= 1
+     length.append([index,1])
      time += 1
      if self.testbt[index]  == 0: self.completionTime[index] = time
      break
@@ -153,7 +165,9 @@ class SJF(inputs):
    for i in range(self.n):
     index = self.burstTime[i][1]
     if self.burstTime[i][0] != 0 and self.testat[index] <= time:
+     startTime.append([index,time])
      time += self.burstTime[i][0]
+     length.append([index,self.burstTime[i][0]])
      self.burstTime[i][0] = 0
      self.completionTime[index] = time
      break
@@ -184,7 +198,9 @@ class SRTF(inputs):
    for i in range(self.n):
     index = self.burstTime[i][1]
     if self.burstTime[i][0] > 0  and self.testat[index] <= time:
+     startTime.append([index,time])
      self.burstTime[i][0] -= 1
+     length.append([index,1])
      time += 1
      self.burstTime.sort()
      if self.burstTime[i][0] == 0: self.completionTime[index] = time
